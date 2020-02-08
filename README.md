@@ -25,7 +25,7 @@ A → Y <: A → X
 
 i.e. A method returning a `Y` can be declared as returning an `X`.
 
-### Example: see [`lib.rs`](blob/master/src/lib.rs#L12)
+### Example: see [`lib.rs`](src/lib.rs#L12)
 
 ```rust
 pub fn covariance() {
@@ -53,7 +53,7 @@ A → X <: B → Y
 i.e. A method accepting an `A` as an argument can be declared as
 accepting a `B`.
 
-### Example: see [`lib.rs`](blob/master/src/lib.rs#L38)
+### Example: see [`lib.rs`](src/lib.rs#L38)
 
 Note that you can think of lifetimes as traits: for example,
 the way you declare a lifetime outlives another (`'cat: 'animal`)
@@ -80,4 +80,4 @@ pub fn contravariance<'animal, 'cat: 'animal>() {
 
 ## License
 
-This project is licensed under the [MIT License](blob/master/LICENSE.md).
+This project is licensed under the [MIT License](LICENSE.md).
