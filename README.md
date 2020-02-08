@@ -23,19 +23,27 @@ Methods are covariant with respect to their return types:
 A → Y <: A → X
 ```
 
-i.e. A method returning a `Y` can be declared as returning an `X`.
+i.e. A method returning a `Y` can be used as if it is returning
+an `X`.
 
-### Example: see [`lib.rs`](src/lib.rs#L12)
+###### NOTE: Rust applies covariance for the lifetimes of the methods' return types.
+
+### Example: see [`lib.rs`](src/lib.rs#L18)
+
+Note that you can think of lifetimes as traits: for example,
+the way you declare a lifetime outlives another (`'cat: 'animal`)
+is also how you declare a trait is a subtype of another
+(`Cat: Animal`).
 
 ```rust
-pub fn covariance() {
-    let mut return_type: fn() -> &'static dyn Animal;
+pub fn covariance<'animal, 'cat: 'animal>() {
+    let mut return_type: fn() -> &'animal ();
     //      Cat <: Animal
     // -----------------------
     // () → Cat <: () → Animal
-    return_type = || -> &'static dyn Animal { &SOME_ANIMAL };
-    return_type = || -> &'static dyn Animal { &SOME_CAT };
-    // A method returning a `Cat` can be declared as returning
+    return_type = (|| &()) as fn() -> &'animal ();
+    return_type = (|| &()) as fn() -> &'cat ();
+    // A method returning a `Cat` can be used as one returning
     // an `Animal`.
 }
 ```
@@ -49,11 +57,12 @@ Methods are contravariant with respect to their arguments types:
 --------------
 A → X <: B → Y
 ```
+i.e. A method accepting an `A` as an argument can be used as if
+it is accepting a `B`.
 
-i.e. A method accepting an `A` as an argument can be declared as
-accepting a `B`.
+###### NOTE: Rust applies contravariance for the lifetimes of the methods' arguments.
 
-### Example: see [`lib.rs`](src/lib.rs#L38)
+### Example: see [`lib.rs`](src/lib.rs#L44)
 
 Note that you can think of lifetimes as traits: for example,
 the way you declare a lifetime outlives another (`'cat: 'animal`)
@@ -69,7 +78,7 @@ pub fn contravariance<'animal, 'cat: 'animal>() {
     argument_type = (|_| ()) as fn(&'cat ());
     argument_type = (|_| ()) as fn(&'animal ());
     // A method accepting an `Animal` as an argument can be
-    // declared as returning a `Cat`.
+    // used as one accepting a `Cat`.
 }
 ```
 
